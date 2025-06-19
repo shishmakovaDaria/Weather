@@ -21,15 +21,28 @@ struct MainView: View {
                 endPoint: .bottom
             )
             .ignoresSafeArea()
-            if viewModel.isLoading {
-                ProgressView()
-                    .progressViewStyle(.circular)
-                    .scaleEffect(2.0)
-            } else if !viewModel.dayWeather.isEmpty {
-                LazyVStack {
-                    ForEach(viewModel.dayWeather) { dayWeather in
-                        Text("\(dayWeather.temperature)")
+            VStack {
+                HStack(spacing: 10) {
+                    Image(systemName: "location.fill")
+                    Text("Weather in Saint Petersburg")
+                        .font(.title3)
+                    Spacer()
+                }
+                .padding([.leading, .top], 16)
+                if viewModel.isLoading {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .scaleEffect(2.0)
+                } else if !viewModel.dayWeather.isEmpty {
+                    ScrollView (showsIndicators: false) {
+                        LazyVStack {
+                            ForEach(viewModel.dayWeather) { dayWeather in
+                                MainRowView(dayWeather: dayWeather)
+                            }
+                        }
+                        .padding(.top, 16)
                     }
+                    .padding([.leading, .trailing], 16)
                 }
             }
         }
