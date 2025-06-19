@@ -8,13 +8,15 @@
 import Foundation
 
 struct ForecastRequest: NetworkRequest {
-    var endpoint: URL? {
-        URL(string: "https://api.weatherapi.com/v1/forecast.json?q=\(city)&days=5&key=59caef7dd0d84cad986122644251906")
-    }
-    
-    var city: String
+    let endpoint: URL?
     
     init(for city: String) {
-        self.city = city
+        var components = URLComponents(string: "https://api.weatherapi.com/v1/forecast.json")
+        components?.queryItems = [
+            URLQueryItem(name: "q", value: city),
+            URLQueryItem(name: "days", value: "5"),
+            URLQueryItem(name: "key", value: Constants.apiKey)
+        ]
+        self.endpoint = components?.url
     }
 }
