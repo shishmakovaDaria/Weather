@@ -11,4 +11,6 @@ enum Constants {
     
     // TODO: вставьте сюда ваш API ключ
     static let apiKey = "59caef7dd0d84cad986122644251906"
+    
+    static let defaultCity = "saint-petersburg"
 }

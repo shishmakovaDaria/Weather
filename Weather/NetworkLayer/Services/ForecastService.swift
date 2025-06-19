@@ -22,7 +22,7 @@ struct ForecastService: ForecastServiceProtocol {
     }
     
     // MARK: - Public methods
-    func getForecast(for city: String = "saint-petersburg") async throws -> WeatherResponse {
+    func getForecast(for city: String) async throws -> WeatherResponse {
         let getForecastRequest = ForecastRequest(for: city)
         let response = try await networkClient.send(request: getForecastRequest, type: WeatherResponse.self)
         

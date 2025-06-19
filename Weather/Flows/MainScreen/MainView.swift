@@ -11,11 +11,31 @@ struct MainView: View {
     @ObservedObject var viewModel = MainViewModel()
     
     var body: some View {
-        Color.pink
+        ZStack {
+            LinearGradient(
+                colors: [
+                    Color.blue.opacity(0.8),
+                    Color.orange.opacity(0.8)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
             .ignoresSafeArea()
-            .task {
-                viewModel.fetchWeather()
+            if viewModel.isLoading {
+                ProgressView()
+                    .progressViewStyle(.circular)
+                    .scaleEffect(2.0)
+            } else if !viewModel.dayWeather.isEmpty {
+                LazyVStack {
+                    ForEach(viewModel.dayWeather) { dayWeather in
+                        Text("\(dayWeather.temperature)")
+                    }
+                }
             }
+        }
+        .task {
+            viewModel.fetchWeather()
+        }
     }
 }
 

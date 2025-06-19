@@ -1,5 +1,5 @@
 //
-//  Forecast.swift
+//  WeatherResponse.swift
 //  Weather
 //
 //  Created by Дарья Шишмакова on 19.06.2025.
@@ -36,4 +36,11 @@ struct Day: Codable {
 struct Condition: Codable {
     let text: String
     let icon: String
+}
+
+// MARK: - extension
+extension WeatherResponse {
+    func convertToDayWeather() -> [DayWeatherModel] {
+        forecast.forecastday.map { DayWeatherModel(from: $0) }
+    }
 }
