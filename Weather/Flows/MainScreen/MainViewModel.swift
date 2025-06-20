@@ -12,6 +12,7 @@ final class MainViewModel: ObservableObject {
     
     // MARK: - Publishers
     @Published var dayWeather: [DayWeatherModel] = []
+    @Published var weatherLocation: Location?
     @Published var isLoading: Bool = false
     
     // MARK: - Services
@@ -33,6 +34,7 @@ final class MainViewModel: ObservableObject {
             do {
                 let weatherForecast = try await forecastService.getForecast(for: Constants.defaultCity)
                 self.dayWeather = weatherForecast.convertToDayWeather()
+                self.weatherLocation = weatherForecast.location
             } catch {
               //todo error handling
             }

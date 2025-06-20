@@ -24,11 +24,10 @@ struct MainView: View {
             VStack {
                 HStack(spacing: 10) {
                     Image(systemName: "location.fill")
-                    Text("Weather in Saint Petersburg")
-                        .font(.title3)
-                    Spacer()
+                    Text("\(viewModel.weatherLocation?.name ?? ""), \(viewModel.weatherLocation?.country ?? "")")
+                        .font(.headline)
                 }
-                .padding([.leading, .top], 16)
+                .padding(.top, 16)
                 if viewModel.isLoading {
                     ProgressView()
                         .progressViewStyle(.circular)
@@ -44,6 +43,12 @@ struct MainView: View {
                     }
                     .padding([.leading, .trailing], 16)
                 }
+                Divider()
+                Link("по данным Weatherapi.com",
+                     destination: URL(string: "https://www.weatherapi.com/")!)
+                .font(.footnote)
+                .foregroundColor(.secondary)
+                .padding(.top, 5)
             }
         }
         .task {
