@@ -36,7 +36,7 @@ struct DayWeatherModel: Identifiable, Hashable {
     
     var dayOfWeek: String {
         if Calendar.current.isDateInToday(date) {
-            return "Today"
+            return LocalizableStrings.today
         } else {
             let formatter = DateFormatter()
             formatter.dateFormat = "EEEE"

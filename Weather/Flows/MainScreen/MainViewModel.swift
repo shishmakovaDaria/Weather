@@ -14,6 +14,7 @@ final class MainViewModel: ObservableObject {
     @Published var dayWeather: [DayWeatherModel] = []
     @Published var weatherLocation: Location?
     @Published var isLoading: Bool = false
+    @Published var errorMessage: String?
     
     // MARK: - Services
     private let forecastService: ForecastServiceProtocol
@@ -36,7 +37,22 @@ final class MainViewModel: ObservableObject {
                 self.dayWeather = weatherForecast.convertToDayWeather()
                 self.weatherLocation = weatherForecast.location
             } catch {
-              //todo error handling
+                let message: String
+
+                switch error {
+                case NetworkClientError.httpStatusCode(let code):
+                    message = LocalizableStrings.serverError + " \(code)"
+                case NetworkClientError.urlRequestError(let underlyingError):
+                    message = [LocalizableStrings.requestError, underlyingError.localizedDescription].joined(separator: " ")
+                case NetworkClientError.urlSessionError:
+                    message = LocalizableStrings.networkError
+                case NetworkClientError.parsingError:
+                    message = LocalizableStrings.failedProcessData
+                default:
+                    message = LocalizableStrings.unknownError
+                }
+
+                self.errorMessage = message
             }
         }
     }

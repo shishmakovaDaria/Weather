@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct MainView: View {
-    @ObservedObject var viewModel = MainViewModel()
     
+    // MARK: - Properties
+    @ObservedObject var viewModel = MainViewModel()
+    @State private var showErrorAlert = false
+    
+    // MARK: - Body
     var body: some View {
         ZStack {
             LinearGradient(
@@ -22,17 +26,18 @@ struct MainView: View {
             )
             .ignoresSafeArea()
             VStack {
-                HStack(spacing: 10) {
-                    Image(systemName: "location.fill")
-                    Text("\(viewModel.weatherLocation?.name ?? ""), \(viewModel.weatherLocation?.country ?? "")")
-                        .font(.headline)
-                }
-                .padding(.top, 16)
                 if viewModel.isLoading {
+                    Spacer()
                     ProgressView()
                         .progressViewStyle(.circular)
                         .scaleEffect(2.0)
                 } else if !viewModel.dayWeather.isEmpty {
+                    HStack(spacing: 10) {
+                        Image(systemName: "location.fill")
+                        Text("\(viewModel.weatherLocation?.name ?? ""), \(viewModel.weatherLocation?.country ?? "")")
+                            .font(.headline)
+                    }
+                    .padding(.top, 16)
                     ScrollView (showsIndicators: false) {
                         LazyVStack {
                             ForEach(viewModel.dayWeather) { dayWeather in
@@ -43,8 +48,9 @@ struct MainView: View {
                     }
                     .padding([.leading, .trailing], 16)
                 }
+                Spacer()
                 Divider()
-                Link("по данным Weatherapi.com",
+                Link(LocalizableStrings.accordingToLink,
                      destination: URL(string: "https://www.weatherapi.com/")!)
                 .font(.footnote)
                 .foregroundColor(.secondary)
@@ -53,6 +59,19 @@ struct MainView: View {
         }
         .task {
             viewModel.fetchWeather()
+        }
+        .onReceive(viewModel.$errorMessage) { message in
+            showErrorAlert = message != nil
+        }
+        .alert(
+            LocalizableStrings.error,
+            isPresented: $showErrorAlert
+        ) {
+            Button(LocalizableStrings.ok) {
+                viewModel.errorMessage = nil
+            }
+        } message: {
+            Text(viewModel.errorMessage ?? "")
         }
     }
 }
