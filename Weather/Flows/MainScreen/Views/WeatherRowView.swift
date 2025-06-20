@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct MainRowView: View {
-    var dayWeather: DayWeatherModel
+struct WeatherRowView: View {
+    let dayWeather: DayWeatherModel
     
     var body: some View {
         HStack {
@@ -53,9 +53,9 @@ struct MainRowView: View {
 
 #Preview {
     ZStack {
-        Color.blue
+        Color.gray
             .ignoresSafeArea()
-        MainRowView(
+        WeatherRowView(
             dayWeather: DayWeatherModel(
                 date: Date(),
                 temperature: 13,

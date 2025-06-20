@@ -12,7 +12,7 @@ final class MainViewModel: ObservableObject {
     
     // MARK: - Publishers
     @Published var dayWeather: [DayWeatherModel] = []
-    @Published var weatherLocation: Location?
+    @Published var weatherLocation: Location = Location(name: "", country: "")
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     

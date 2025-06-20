@@ -15,48 +15,11 @@ struct MainView: View {
     
     // MARK: - Body
     var body: some View {
-        ZStack {
-            LinearGradient(
-                colors: [
-                    Color.blue.opacity(0.8),
-                    Color.orange.opacity(0.8)
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea()
-            VStack {
-                if viewModel.isLoading {
-                    Spacer()
-                    ProgressView()
-                        .progressViewStyle(.circular)
-                        .scaleEffect(2.0)
-                } else if !viewModel.dayWeather.isEmpty {
-                    HStack(spacing: 10) {
-                        Image(systemName: "location.fill")
-                        Text("\(viewModel.weatherLocation?.name ?? ""), \(viewModel.weatherLocation?.country ?? "")")
-                            .font(.headline)
-                    }
-                    .padding(.top, 16)
-                    ScrollView (showsIndicators: false) {
-                        LazyVStack {
-                            ForEach(viewModel.dayWeather) { dayWeather in
-                                MainRowView(dayWeather: dayWeather)
-                            }
-                        }
-                        .padding(.top, 16)
-                    }
-                    .padding([.leading, .trailing], 16)
-                }
-                Spacer()
-                Divider()
-                Link(LocalizableStrings.accordingToLink,
-                     destination: URL(string: "https://www.weatherapi.com/")!)
-                .font(.footnote)
-                .foregroundColor(.secondary)
-                .padding(.top, 5)
-            }
-        }
+        WeatherView(
+            isLoading: viewModel.isLoading,
+            dayWeather: viewModel.dayWeather,
+            weatherLocation: viewModel.weatherLocation
+        )
         .task {
             viewModel.fetchWeather()
         }
